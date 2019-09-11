@@ -21,7 +21,7 @@ else
     fi
 fi
 
-if [ -f "$DIR$FILE" ]; then
+if [ -f "$DIR/$FILE" ]; then
     composer self-update
     RESULT=$?
 else
