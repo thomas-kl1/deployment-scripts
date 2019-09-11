@@ -22,12 +22,20 @@ if [ -n "$EXIT" -a "$EXIT" = 1 ]; then
 fi
 
 for SETUPS in "$@"; do
-    NAME=$(echo $SETUPS | cut -d'=' -f1)
-    ARGUMENTS=$(echo $SETUPS | cut -d'=' -f2)
+    if [ $SETUPS = *"="* ]; then
+        NAME=$(echo $SETUPS | cut -d'=' -f1)
+        ARGUMENTS=$(echo $SETUPS | cut -d'=' -f2)
+    else
+        NAME=$SETUPS
+        ARGUMENTS=""
+    fi
     MESSAGE="$($BASE_DIR_SETUP$NAME.sh $ARGUMENTS 2>&1 1>/dev/null)"
     RESULT=$?
     if [ "$RESULT" != 0 ]; then
         echo -e "\e[41m$MESSAGE\e[0m"
+echo "ERRRROR"
+echo $RESULT $SETUPS
+echo "$BASE_DIR_SETUP $NAME.sh $ARGUMENTS"
         exit $RESULT
     else
         echo -e "\e[42m$NAME has been successfully installed!\e[0m"
