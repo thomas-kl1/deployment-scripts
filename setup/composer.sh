@@ -22,7 +22,7 @@ else
 fi
 
 if [ -f "$DIR/$FILE" ]; then
-    composer self-update
+    MESSAGE="$(composer self-update 2>&1 1>/dev/null)"
     RESULT=$?
 else
     EXPECTED_SIGNATURE="$(wget -q -O - https://composer.github.io/installer.sig)"
@@ -35,10 +35,18 @@ else
         exit 1
     fi
 
-    php composer-setup.php --quiet --install-dir=$DIR --filename=$FILE
+    mkdir -p $DIR
+
+    MESSAGE="$(php composer-setup.php --quiet --install-dir=$DIR --filename=$FILE 2>&1 1>/dev/null)"
     RESULT=$?
     rm composer-setup.php
 fi
 
+RESULT=$?
+if [ "$RESULT" != 0 ]; then
+    echo -e "\e[41m$MESSAGE\e[0m"
+else
+    echo -e "\e[42m$MESSAGE\e[0m"
+fi
 exit $RESULT
 

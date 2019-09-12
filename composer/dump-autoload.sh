@@ -6,7 +6,12 @@ else
     EXEC="$1"
 fi
 
-$EXEC install dump-autoload --optimize-autoloader --apcu
-
-exit 0
+MESSAGE="$($EXEC dump-autoload --optimize --apcu 2>&1 1>/dev/null)"
+RESULT=$?
+if [ "$RESULT" != 0 ]; then
+    echo -e "\e[41m$MESSAGE\e[0m"
+else
+    echo -e "\e[42m$MESSAGE\e[0m"
+fi
+exit $RESULT
 
