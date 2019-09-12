@@ -1,23 +1,43 @@
 #!/bin/sh
 
 if [ $# = 0 ]; then
+    PHP_EXEC="php"
     EXEC="bin/magento"
 else
-    EXEC="$1"
+    if [ $# = 2 ]; then
+        PHP_EXEC=$1
+        EXEC=$2
+    else
+        PHP_EXEC="php"
+        EXEC=$2
+    fi
 fi
 
-$EXEC setup:install
-$EXEC deploy:mode:set production
-$EXEC config:set dev/translate/translate_inline 0
-$EXEC config:set dev/translate/inline_active 0
-$EXEC config:set dev/js/merge_files 1
-$EXEC config:set dev/js/enable_js_bundling 1
-$EXEC config:set dev/js/minify_files 1
-$EXEC config:set dev/css/merge_css_files 1
-$EXEC config:set dev/css/minify_files 1
-$EXEC config:set dev/grid/async_indexing 1
-$EXEC indexer:reindex
-$EXEC cache:flush
+CMDS=(
+    "setup:install" 
+    "deploy:mode:set production" 
+    "config:set dev/translate/translate_inline 0" 
+    "config:set dev/translate/inline_active 0" 
+    "config:set dev/js/merge_files 1" 
+    "config:set dev/js/enable_js_bundling 1" 
+    "config:set dev/js/minify_files 1" 
+    "config:set dev/css/merge_css_files 1" 
+    "config:set dev/css/minify_files 1" 
+    "config:set dev/grid/async_indexing 1" 
+    "indexer:reindex" 
+    "cache:flush" 
+)
 
-exit 0
+for CMD in "${CMDS[@]}"; do
+    MESSAGE="$($PHP_EXEC $EXEC $CMD 2>/dev/null 1>&1)"
+    RESULT=$?
+    if [ "$RESULT" != 0 ]; then
+        echo -e "\e[41m$MESSAGE\e[0m"
+        exit $RESULT
+    else
+        echo -e "\e[42m$MESSAGE\e[0m"
+    fi
+done
+
+exit $RESULT
 

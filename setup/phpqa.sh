@@ -3,7 +3,7 @@
 if [ $# = 0 ]; then
     EXEC="composer"
 else
-    EXEC="$1"
+    EXEC=$1
 fi
 
 MESSAGE="$($EXEC global require \
