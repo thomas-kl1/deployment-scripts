@@ -8,8 +8,8 @@ else
         PHP_EXEC=$1
         EXEC=$2
     else
-        PHP_EXEC="php"
-        EXEC=$2
+        PHP_EXEC=$1
+        EXEC="bin/magento"
     fi
 fi
 
