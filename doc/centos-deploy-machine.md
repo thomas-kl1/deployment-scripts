@@ -1,10 +1,3 @@
- 
-
-Provisioned VM
-Deploy machine: 10.27.5.228
-
-Address: https://bamboo.mpbio.com:8443
-
 Users:
 
 ansistrano
