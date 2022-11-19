@@ -17,11 +17,8 @@ STATE_MESSAGE="$($PHP_EXEC $EXEC setup:db:status 2>/dev/null 1>&1)"
 
 if [[ $STATE_MESSAGE != "All modules are up to date." ]]; then
     CMDS=(
-        "cron:remove --no-ansi"
-        "maintenance:enable --no-ansi"
-        "setup:upgrade --keep-generated --no-ansi"
-        "maintenance:disable --no-ansi"
-        "cron:install --no-ansi"
+        "bin/magento setup:di:compile --no-ansi --no-interaction"
+        "setup:static-content:deploy --no-ansi --no-interaction --jobs=1"
     )
 
     for CMD in "${CMDS[@]}"; do
